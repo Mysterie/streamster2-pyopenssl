@@ -7,5 +7,5 @@ Openssl/ -> Open source tls/dtls implementation in C language.
 pyOpenSSL/ -> Open source tls implementation in python language.
 Test/ -> Directory for testing/analyse.
 
-I will create a google doc on my research in tls/dtls this week.
+I will update the wiki with my research in tls/dtls.
 
