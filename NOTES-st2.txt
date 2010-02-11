@@ -26,12 +26,11 @@ rm -fr ssl
 
 OpenSSL DTLS tests:
 
-WORKING:
-
 CLIENT:
 cd streamster2-pyopenssl/dtls-example/dtls_client
 /usr/local/ssl/bin/openssl s_server -dtls1  -port 12345 -cert dtls.pem -key dtls.key
 
+SERVER:
 cd streamster2-pyopenssl/dtls-example/dtls_server
 /usr/local/ssl/bin/openssl s_client -dtls1 -connect 127.0.0.1:12345 -CAfile dtlsCA.pem -cert dtlsc.pem -key dtlsc.key
 
