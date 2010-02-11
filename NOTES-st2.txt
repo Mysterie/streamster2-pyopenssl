@@ -11,6 +11,8 @@ DTLS Spike:
 - Issues with Patch for renego: 0.9.8l doesn't work apparently
 	We disable renegotiation
 
+==================================================================================================================
+
 OpenSSL compile:
 ./config shared
 make
@@ -19,3 +21,116 @@ sudo make install
 cd /usr/local
 rm -fr ssl
 /usr/local/ssl/bin/openssl version
+
+==================================================================================================================
+
+OpenSSL DTLS tests:
+
+WORKING:
+
+CLIENT:
+cd streamster2-pyopenssl/dtls-example/dtls_client
+/usr/local/ssl/bin/openssl s_server -dtls1  -port 12345 -cert dtls.pem -key dtls.key
+
+cd streamster2-pyopenssl/dtls-example/dtls_server
+/usr/local/ssl/bin/openssl s_client -dtls1 -connect 127.0.0.1:12345 -CAfile dtlsCA.pem -cert dtlsc.pem -key dtlsc.key
+
+==================================================================================================================
+
+$ /usr/local/ssl/bin/openssl s_client -dtls1 -connect 127.0.0.1:12345 -CAfile dtlsCA.pem -cert dtlsc.pem -key dtlsc.key
+CONNECTED(00000003)
+depth=1 C = IN, ST = TN, L = CH, O = dtls-example, emailAddress = hi2arun@gmail.com, CN = dtls-server
+verify return:1
+depth=0 C = IN, ST = TN, O = dtls-example, CN = dtlsserver, emailAddress = hi2arun@gmail.com
+verify return:1
+---
+Certificate chain
+ 0 s:/C=IN/ST=TN/O=dtls-example/CN=dtlsserver/emailAddress=hi2arun@gmail.com
+   i:/C=IN/ST=TN/L=CH/O=dtls-example/emailAddress=hi2arun@gmail.com/CN=dtls-server
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIByDCCAXICAQEwDQYJKoZIhvcNAQEEBQAwdjELMAkGA1UEBhMCSU4xCzAJBgNV
+BAgTAlROMQswCQYDVQQHEwJDSDEVMBMGA1UEChMMZHRscy1leGFtcGxlMSAwHgYJ
+KoZIhvcNAQkBFhFoaTJhcnVuQGdtYWlsLmNvbTEUMBIGA1UEAxMLZHRscy1zZXJ2
+ZXIwHhcNMTAwMjExMTczNzM2WhcNMTEwMjExMTczNzM2WjBoMQswCQYDVQQGEwJJ
+TjELMAkGA1UECBMCVE4xFTATBgNVBAoTDGR0bHMtZXhhbXBsZTETMBEGA1UEAxMK
+ZHRsc3NlcnZlcjEgMB4GCSqGSIb3DQEJARYRaGkyYXJ1bkBnbWFpbC5jb20wXDAN
+BgkqhkiG9w0BAQEFAANLADBIAkEAlVv6nsg04/rukv8jJ0W/k8eGGmuKw19MC7MZ
+4GbUXaEQM04uzV7kJBJkkxbUHM0V7TiBjTHoKR/3f9dNgmkBEQIDAQABMA0GCSqG
+SIb3DQEBBAUAA0EAMGjlEj7s+eD8xb87iOq7197AYGpLEkYcR8RzarAOValuP015
+f0xC/CPD7LYqkZcs8FU3LOU0MZhNXXwkcWWpZA==
+-----END CERTIFICATE-----
+subject=/C=IN/ST=TN/O=dtls-example/CN=dtlsserver/emailAddress=hi2arun@gmail.com
+issuer=/C=IN/ST=TN/L=CH/O=dtls-example/emailAddress=hi2arun@gmail.com/CN=dtls-server
+---
+No client certificate CA names sent
+---
+SSL handshake has read 1080 bytes and written 500 bytes
+---
+New, TLSv1/SSLv3, Cipher is ECDHE-RSA-AES256-SHA
+Server public key is 512 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+SSL-Session:
+    Protocol  : DTLSv1
+    Cipher    : ECDHE-RSA-AES256-SHA
+    Session-ID: 9D7DBFB310BCF616100AD2A58E47E561D09442411A8B8CF64621D55198F8A907
+    Session-ID-ctx: 
+    Master-Key: 79615B7D5B6AC5650A9BC979388727B6F7A014B50E6324F3E08F51626D97AF4A28C11C2B826799FC061BFCC9A8BD3929
+    Key-Arg   : None
+    PSK identity: None
+    PSK identity hint: None
+    TLS session ticket:
+    0000 - 48 de 6d 26 42 60 80 8b-3a 62 f9 00 18 89 03 ea   H.m&B`..:b......
+    0010 - 61 e4 f3 91 fd 56 89 57-36 cc 0b d6 21 ee a1 c9   a....V.W6...!...
+    0020 - 26 69 84 41 24 c7 31 c0-d0 22 bf ec c3 c7 8a 7a   &i.A$.1..".....z
+    0030 - 33 e1 90 69 c6 99 a2 95-f4 fa 65 e3 50 70 40 52   3..i......e.Pp@R
+    0040 - 67 f1 f6 42 cd 44 9b 60-89 6c 50 2e 5e 7a 12 87   g..B.D.`.lP.^z..
+    0050 - 52 de 59 96 4f 2c f7 ff-44 e0 d8 1d 78 88 05 fc   R.Y.O,..D...x...
+    0060 - 50 17 ec 41 ef 40 f1 70-c1 10 13 05 0e 51 69 f2   P..A.@.p.....Qi.
+    0070 - da 5d 7a 15 d7 52 0c 56-85 7b 55 47 be 47 ae bb   .]z..R.V.{UG.G..
+    0080 - 2a 8b 33 6d 06 b4 76 a6-16 88 1e f0 b1 4b 23 9a   *.3m..v......K#.
+    0090 - 4d c0 69 30 0a 09 01 68-36 be 49 8a c7 a1 a6 c4   M.i0...h6.I.....
+
+    Start Time: 1265922192
+    Timeout   : 7200 (sec)
+    Verify return code: 0 (ok)
+---
+
+
+
+fsdf
+sdfdsf
+ds
+fs
+dfsdf
+
+
+^C
+$
+
+==================================================================================================================
+
+$ /usr/local/ssl/bin/openssl s_server   -dtls1  -port 12345 -cert dtls.pem -key dtls.key 
+Using default temp DH parameters
+Using default temp ECDH parameters
+ACCEPT
+-----BEGIN SSL SESSION PARAMETERS-----
+MFYCAQECAwD+/wQCwBQEAAQweWFbfVtqxWUKm8l5OIcntvegFLUOYyTz4I9RYm2X
+r0oowRwrgmeZ/AYb/MmovTkpoQYCBEt0cJCiBAICHCCkBgQEAQAAAA==
+-----END SSL SESSION PARAMETERS-----
+Shared ciphers:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES256-SHA:DHE-DSS-AES256-SHA:DHE-RSA-CAMELLIA256-SHA:DHE-DSS-CAMELLIA256-SHA:ECDH-RSA-AES256-SHA:ECDH-ECDSA-AES256-SHA:AES256-SHA:CAMELLIA256-SHA:ECDHE-RSA-DES-CBC3-SHA:ECDHE-ECDSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:EDH-DSS-DES-CBC3-SHA:ECDH-RSA-DES-CBC3-SHA:ECDH-ECDSA-DES-CBC3-SHA:DES-CBC3-SHA:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA:DHE-RSA-SEED-SHA:DHE-DSS-SEED-SHA:DHE-RSA-CAMELLIA128-SHA:DHE-DSS-CAMELLIA128-SHA:ECDH-RSA-AES128-SHA:ECDH-ECDSA-AES128-SHA:AES128-SHA:SEED-SHA:CAMELLIA128-SHA:IDEA-CBC-SHA:EDH-RSA-DES-CBC-SHA:EDH-DSS-DES-CBC-SHA:DES-CBC-SHA:EXP-EDH-RSA-DES-CBC-SHA:EXP-EDH-DSS-DES-CBC-SHA:EXP-DES-CBC-SHA:EXP-RC2-CBC-MD5
+CIPHER is ECDHE-RSA-AES256-SHA
+Secure Renegotiation IS supported
+
+
+
+fsdf
+sdfdsf
+ds
+fs
+dfsdf
+
+==================================================================================================================
