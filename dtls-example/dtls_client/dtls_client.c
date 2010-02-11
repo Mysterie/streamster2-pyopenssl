@@ -223,8 +223,8 @@ static int dtls_connect (void)
 	int peerlen = sizeof (struct sockaddr);
 
 	ssl = SSL_new (ctx);
-//	if (DTLS1_VERSION == SSL_version (ssl))
-//		fprintf (stderr, "%s: %s(): Yes: DTLS1_VERSION CLIENT\n", __FILE__, __func__);
+   if (DTLS1_VERSION == SSL_version (ssl))
+      fprintf (stderr, "%s: %s(): Yes: DTLS1_VERSION CLIENT\n", __FILE__, __func__);
 	sbio = BIO_new_dgram (udpsock, BIO_NOCLOSE);
 	if (getsockname (udpsock, &peer, (socklen_t *)&peerlen) < 0)
 	{
@@ -239,7 +239,7 @@ static int dtls_connect (void)
 	BIO_ctrl(sbio, BIO_CTRL_DGRAM_MTU_DISCOVER, 0, NULL);
 	SSL_set_bio (ssl, sbio, sbio);
 	SSL_set_connect_state (ssl);
-//	fprintf (stderr, "%s: %s(): Am now here @ %d\n", __FILE__, __func__, __LINE__);
+   fprintf (stderr, "%s: %s(): Am now here @ %d\n", __FILE__, __func__, __LINE__);
 	width = SSL_get_fd (ssl) + 1;
 	FD_ZERO (&wfd);
 	FD_SET (SSL_get_fd (ssl), &wfd);
@@ -304,7 +304,7 @@ int main(int argc, char **argv)
 	{
 		ctx = dtls_setup_sslclient();
 REDO:
-	//	fprintf (stderr, "%s: %s(): Am here @ %d\n", __FILE__, __func__, __LINE__);
+      fprintf (stderr, "%s: %s(): Am here @ %d\n", __FILE__, __func__, __LINE__);
 		ret = dtls_connect ();
 		if (-1 == ret)
 			goto END;
@@ -335,13 +335,13 @@ static int handle_data(SSL *ssl)
 	int retval;
 	char sendbuf[1024] = {0};
 
-//	fprintf (stderr, "%s(): received a call...\n", __func__);
+   fprintf (stderr, "%s(): received a call...\n", __func__);
 	strncpy (sendbuf, "MSG from CLIENT: Hello Server!\n", sizeof (sendbuf));
 
 	while (1)
 	{
 		retval = SSL_write (ssl, sendbuf, sizeof (sendbuf));
-//		fprintf (stderr, "%s: %s(): count: %d\n", __FILE__, __func__, retval);
+      fprintf (stderr, "%s: %s(): count: %d\n", __FILE__, __func__, retval);
 		switch (SSL_get_error (ssl, retval))
 		{
 			case SSL_ERROR_NONE:

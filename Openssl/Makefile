@@ -11,11 +11,11 @@ SHLIB_VERSION_NUMBER=0.9.8
 SHLIB_VERSION_HISTORY=
 SHLIB_MAJOR=0
 SHLIB_MINOR=9.8
-SHLIB_EXT=
-PLATFORM=dist
-OPTIONS= no-camellia no-capieng no-cms no-gmp no-jpake no-krb5 no-mdc2 no-montasm no-rc5 no-rfc3779 no-seed no-shared no-zlib no-zlib-dynamic
-CONFIGURE_ARGS=dist
-SHLIB_TARGET=
+SHLIB_EXT=.$(SHLIB_MAJOR).$(SHLIB_MINOR).dylib
+PLATFORM=darwin-i386-cc
+OPTIONS=enable-shared 386 no-camellia no-capieng no-cms no-gmp no-jpake no-krb5 no-mdc2 no-montasm no-rc5 no-rfc3779 no-seed no-sse2 no-zlib no-zlib-dynamic
+CONFIGURE_ARGS=darwin-i386-cc shared 386
+SHLIB_TARGET=darwin-shared
 
 # HERE indicates where this Makefile lives.  This can be used to indicate
 # where sub-Makefiles are expected to be.  Currently has very limited usage,
@@ -60,16 +60,16 @@ OPENSSLDIR=/usr/local/ssl
 # PKCS1_CHECK - pkcs1 tests.
 
 CC= cc
-CFLAG= -O
+CFLAG= -fPIC -fno-common -DOPENSSL_PIC -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H -arch i386 -O3 -fomit-frame-pointer -DL_ENDIAN
 DEPFLAG= -DOPENSSL_NO_CAMELLIA -DOPENSSL_NO_CAPIENG -DOPENSSL_NO_CMS -DOPENSSL_NO_GMP -DOPENSSL_NO_JPAKE -DOPENSSL_NO_MDC2 -DOPENSSL_NO_RC5 -DOPENSSL_NO_RFC3779 -DOPENSSL_NO_SEED
-PEX_LIBS= 
+PEX_LIBS= -Wl,-search_paths_first
 EX_LIBS= 
 EXE_EXT= 
 ARFLAGS= 
 AR=ar $(ARFLAGS) r
 ARD=ar $(ARFLAGS) d
 RANLIB= /usr/bin/ranlib
-PERL= /usr/bin/perl5
+PERL= /opt/local/bin/perl
 TAR= tar
 TARFLAGS= --no-recursion
 MAKEDEPPROG=makedepend
@@ -84,7 +84,7 @@ ASFLAG=$(CFLAG)
 
 # For x86 assembler: Set PROCESSOR to 386 if you want to support
 # the 80386.
-PROCESSOR= 
+PROCESSOR= 386
 
 # CPUID module collects small commonly used assembler snippets
 CPUID_OBJ= 
@@ -168,9 +168,9 @@ LIBS=   libcrypto.a libssl.a
 SHARED_CRYPTO=libcrypto$(SHLIB_EXT)
 SHARED_SSL=libssl$(SHLIB_EXT)
 SHARED_FIPS=
-SHARED_LIBS=
-SHARED_LIBS_LINK_EXTS=
-SHARED_LDFLAGS=
+SHARED_LIBS=$(SHARED_FIPS) $(SHARED_CRYPTO) $(SHARED_SSL)
+SHARED_LIBS_LINK_EXTS=.$(SHLIB_MAJOR).dylib .dylib
+SHARED_LDFLAGS=-arch i386 -dynamiclib
 
 GENERAL=        Makefile
 BASENAME=       openssl

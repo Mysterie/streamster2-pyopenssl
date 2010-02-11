@@ -3,12 +3,13 @@ CPP=g++
 CC=gcc
 
 COFLAGS=-O2
-CWFLAGS=-Wall -Werror
-CIFLAGS=-I. -I../common
+# CWFLAGS=-Wall -Werror
+CWFLAGS=-Wall 
+CIFLAGS=-I. -I../common  -I/usr/local/ssl/include/ 
 #Uncomment this if you want more debug messages
 #CMFLAGS=-DDEBUG 
 CMFLAGS=
-CLIBS=-lssl
+CLIBS=-lssl -lcrypto
 
 CFLAGS= $(CWFLAGS) $(COFLAGS) $(CIFLAGS) $(CMFLAGS)
 
@@ -20,7 +21,7 @@ sslmgr.o: ../common/sslmgr.h ../common/sslmgr.c
 	$(CC) $(CFLAGS) -c ../common/sslmgr.c
 	
 dtls_client: dtls_client.o sslmgr.o
-	$(CC) -o dtls_client dtls_client.o sslmgr.o $(CLIBS)
+	$(CC) -L/usr/local/ssl/lib/  -o dtls_client dtls_client.o sslmgr.o $(CLIBS)
 	$(RM) *.o
 
 install: compile
