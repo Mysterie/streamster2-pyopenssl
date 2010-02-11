@@ -1,0 +1,21 @@
+DTLS Spike:
+- Packet Reliability & Retransmission?
+	YES
+- CBC MAC?
+	Obligatoire.
+- P2P compatibility?
+	Not compatible with packets coming from IPs which are not the DTLS peer,
+	e.g: 	A talks to B
+		B talks to C
+		C responds directly to A ==> DOESN'T WORK!
+- Issues with Patch for renego: 0.9.8l doesn't work apparently
+	We disable renegotiation
+
+OpenSSL compile:
+./config shared
+make
+make test
+sudo make install
+cd /usr/local
+rm -fr ssl
+/usr/local/ssl/bin/openssl version
