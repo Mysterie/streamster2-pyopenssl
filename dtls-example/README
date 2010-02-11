@@ -1,0 +1,65 @@
+OpenSSL DTLSv1 Examples by Arun Kumar Srinivasan
+hi2arun [at] gmail [dot] com
+October 23, 2006
+
+
+WHAT IS THIS?
+This is done to demonstrate how to encrypt a UDP channel using OpenSSL DTLSv1 support - DTLS implementation written by Nagendra Modadugu (nagendra@cs.stanford.edu) for the OpenSSL project 2005.
+
+LIST OF FILES:
+
+	Directory: common - Contains callback functions and error reporting functions common to client and server
+		sslmgr.h
+		sslmgr.c
+
+	Directory: dtls_server
+		dtls_server.c	- DTLS server part
+
+	Directory: dtls_client
+		dtls_client.c 	- DTLS client part
+
+PREREQUISITES:
+	It requires OpenSSL package version => 0.9.8a
+
+DOCUMENTATION:
+	This contains a simple DTLS client and DTLS server to show how to send UDP data over an encrypted channel. The client simply sends a string to the server and the server receives it after proper handshakes and prints it on stdout.
+	Most parts of the server and client are respectively taken from apps/s_client.c and apps/s_server.c - Copyright (c) 1999-2005 The OpenSSL Project. For further help, please find it at 
+	http://crypto.stanford.edu/~nagendra/projects/dtls/dtls.html
+
+COMPILING:
+	Untar the pack and simply do "make all". This will build both the server and client. The compiled binaries will be available in the appropriate source directories.
+
+RUNNING the server/client:
+	Before running dtls server and client, generate server and client certificates and place in the directories from where the server and client are gonna be executed.
+
+	Command to generate server cert: dtls_server -s
+	Server certificates details
+		cert	: 	dtls.pem (RSA - 512)	
+		key	:	dtls.key
+		root CA	:	dtlsCA.pem
+		DH file	:	dtlsDH.pem (512)
+	
+	Command to generate client cert: dtls_server -c
+	Client certificate details
+		cert	:	dtlsc.pem (RSA - 512)
+		key	:	dtlsc.key
+		root CA	:	Use the same one thatz used for server - dtlsCA.pem
+
+
+DISCLAIMER:
+	This is purely done for educational purposes. Redistribution and use in source and binary forms, with or without
+modification, are permitted only for educational purposes.
+
+
+
+THIS SOFTWARE IS PROVIDED BY ARUN KUMAR SRINIVASAN ``AS IS'' AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE 
