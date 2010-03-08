@@ -166,6 +166,7 @@ global_verify_callback(int ok, X509_STORE_CTX *x509_ctx)
     crypto_X509Obj *cert;
     int errnum, errdepth, c_ret;
 
+		printf("kikou\n");
     // Get Connection object to check thread state
     ssl = (SSL *)X509_STORE_CTX_get_app_data(x509_ctx);
     conn = (ssl_ConnectionObj *)SSL_get_app_data(ssl);

@@ -1259,7 +1259,7 @@ ssl_Connection_new(PyTypeObject *subtype, PyObject *args, PyObject *kwargs) {
     ssl_ContextObj *ctx;
     PyObject *sock;
     static char *kwlist[] = {"context", "socket", NULL};
-
+		
     if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!O:Connection", kwlist,
                                      &ssl_Context_Type, &ctx, &sock)) {
         return NULL;

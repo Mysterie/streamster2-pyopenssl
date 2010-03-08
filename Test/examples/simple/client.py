@@ -23,26 +23,28 @@ dir = os.path.dirname(sys.argv[0])
 if dir == '':
   dir = os.curdir
 
-ctx = SSL.Context(SSL.DTLSv1_METHOD)
+ctx = SSL.Context(SSL.DTLSv1_METHOD) # SSLv23_METHOD ! DTLSv1_METHOD
 ctx.set_verify(SSL.VERIFY_PEER, verify_cb)
 ctx.use_privatekey_file (os.path.join(dir, 'client.pkey'))
 ctx.use_certificate_file(os.path.join(dir, 'client.cert'))
 ctx.load_verify_locations(os.path.join(dir, 'CA.cert'))
 
-sock = SSL.Connection(ctx, socket.socket(socket.AF_INET, socket.SOCK_DGRAM))
-addr = (sys.argv[1], int(sys.argv[2]))
- 
-while 1:
-  line = sys.stdin.readline()
-  if line == '':
-		break
-		try:
-			sock.sendto(line, addr)
-			sys.stdout.write(sock.recvfrom(10))
-			sys.stdout.flush()
-		except SSL.Error:
-			print 'Connection died unexpectedly'
-			break
+sock = SSL.Connection(ctx, socket.socket(socket.AF_INET, socket.SOCK_DGRAM)) # SOCK_STREAM ! SOCK_DGRAM
+sock.connect((sys.argv[1], int(sys.argv[2])))
+
+#sock.send("Test", addr)
+
+#while 1:
+#  line = sys.stdin.readline()
+#  if line == '':
+#		break
+#		try:
+#			sock.sendto(line, addr)
+#			sys.stdout.write(sock.recvfrom(10))
+#			sys.stdout.flush()
+#		except SSL.Error:
+#			print 'Connection died unexpectedly'
+#			break
 
 sock.shutdown()
 sock.close()

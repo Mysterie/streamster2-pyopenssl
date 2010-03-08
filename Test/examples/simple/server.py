@@ -24,7 +24,7 @@ if dir == '':
     dir = os.curdir
 
 # Initialize context
-ctx = SSL.Context(SSL.DTLSv1_METHOD)
+ctx = SSL.Context(SSL.DTLSv1_METHOD) # SSLv23_METHOD ! DTLSv1_METHOD
 ctx.set_options(SSL.OP_NO_SSLv3)
 ctx.set_verify(SSL.VERIFY_PEER|SSL.VERIFY_FAIL_IF_NO_PEER_CERT, verify_cb) # Demand a certificate
 ctx.use_privatekey_file (os.path.join(dir, 'server.pkey'))
@@ -33,22 +33,14 @@ ctx.load_verify_locations(os.path.join(dir, 'CA.cert'))
 
 # Set up server
 addr = ('', int(sys.argv[1])) 
-server = SSL.Connection(ctx, socket.socket(socket.AF_INET, socket.SOCK_DGRAM))
+server = SSL.Connection(ctx, socket.socket(socket.AF_INET, socket.SOCK_DGRAM)) # SOCK_STREAM ! SOCK_DGRAM
 server.bind(addr)
+server.listen(1)
 
+print "wait client ..." 
+server.accept()
+print "connected :)"
 # clients = {}
 # writers = {}
-
-while 1:
-	data,addr = server.recvfrom(10)
-	print "recv"
-	if not data:
-		break
-	else:
-		try:
-			server.sendto(data, addr)
-		except SSL.Error:
-			print 'Connection died unexpectedly'
-			break
 	
 server.close()
