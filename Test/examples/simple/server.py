@@ -35,10 +35,9 @@ ctx.load_verify_locations(os.path.join(dir, 'CA.cert'))
 addr = ('', int(sys.argv[1])) 
 server = SSL.Connection(ctx, socket.socket(socket.AF_INET, socket.SOCK_DGRAM)) # SOCK_STREAM ! SOCK_DGRAM
 server.bind(addr)
-server.listen(1)
 
 print "wait client ..." 
-server.accept()
+server.recv(10)
 print "connected :)"
 # clients = {}
 # writers = {}

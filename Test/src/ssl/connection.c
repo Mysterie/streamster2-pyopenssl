@@ -1179,6 +1179,8 @@ and socket.\n\
 static ssl_ConnectionObj*
 ssl_Connection_init(ssl_ConnectionObj *self, ssl_ContextObj *ctx, PyObject *sock) {
     int fd;
+		struct sockaddr peer;
+		int peerlen = sizeof (struct sockaddr);
 
     Py_INCREF(ctx);
     self->context = ctx;
@@ -1219,6 +1221,17 @@ ssl_Connection_init(ssl_ConnectionObj *self, ssl_ContextObj *ctx, PyObject *sock
         else 
         {
             SSL_set_fd(self->ssl, (SOCKET_T)fd);
+						if(SSL_version(self->ssl) == 0xfeff) { 
+						// Hard coded 0xfeff for detect DTLSv1_METHOD :(
+								self->into_ssl = self->from_ssl = BIO_new_dgram(fd, BIO_NOCLOSE);
+								if (getsockname (fd, &peer, &peerlen) < 0) {
+										goto error;
+								}
+								BIO_ctrl_set_connected(self->into_ssl, 1, &peer);
+								BIO_ctrl(self->into_ssl, BIO_CTRL_DGRAM_SET_SEND_TIMEOUT, 0, NULL);
+								BIO_ctrl(self->into_ssl, BIO_CTRL_DGRAM_MTU_DISCOVER, 0, NULL);
+								SSL_set_bio(self->ssl, self->into_ssl, self->into_ssl);
+						}
         }
     }
     return self;

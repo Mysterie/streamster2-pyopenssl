@@ -46,5 +46,5 @@ sock.connect((sys.argv[1], int(sys.argv[2])))
 #			print 'Connection died unexpectedly'
 #			break
 
-sock.shutdown()
-sock.close()
+#sock.shutdown()
+#sock.close()
